@@ -6,11 +6,12 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:10:22 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/09 18:16:35 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/04/10 15:42:06 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
 
 int	main(int argc, char **argv)
 {
@@ -36,10 +37,8 @@ int	main(int argc, char **argv)
 	}
 
 	if (!parse_config(lines, &cfg, &map_start))
-	{
-		printf("Error\nFalló el parseo de la configuración\n");
-		return (1);
-	}
+	return (1); // El mensaje ya se imprimió desde dentro
+
 
 	if (!validate_config(&cfg))
 		return (1);
@@ -54,5 +53,8 @@ int	main(int argc, char **argv)
 		return (1);
 
 	printf("✅ Todo OK: configuración y mapa válidos.\n");
+	free_split(lines);
+	free_map(cfg.map);
+	free_config(&cfg);
 	return (0);
 }

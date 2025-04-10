@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 20:03:37 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/08 20:13:33 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/04/10 17:06:44 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,12 @@ char	**read_cub_file(const char *filename)
 	lines_total = count_lines(filename);
 	if (lines_total <= 0)
 		return (NULL);
-
 	lines = malloc(sizeof(char *) * (lines_total + 1));
 	if (!lines)
 		return (NULL);
-
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 		return (free(lines), NULL);
-
 	i = 0;
 	while ((line = get_next_line(fd)))
 		lines[i++] = line;

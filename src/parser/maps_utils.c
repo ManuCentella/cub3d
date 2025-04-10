@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 17:52:54 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/09 18:08:38 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/04/10 17:39:45 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,4 @@ int	is_cell_closed(t_config *cfg, int y, int x)
 			return (0);
 	}
 	return (1);
-}
-
-void	validate_cell(t_config *cfg, int y, int x, int *player_count,
-		int *has_error)
-{
-	char c = cfg->map[y][x];
-
-	if (!is_valid_map_char(c))
-		report_map_error("Invalid character in map", has_error);
-	if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
-		(*player_count)++;
-	if (!is_cell_closed(cfg, y, x))
-		report_map_error("Map not closed by walls", has_error);
 }

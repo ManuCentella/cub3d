@@ -1,9 +1,9 @@
 NO ./textures/wall_n.xpm
 SO ./textures/wall_s.xpm
-WE ./textures/wall_w.xpm
+WE ./textures/wal_w.xpm
 EA ./textures/wall_e.xpm
 F 220,100,0
-C 100,200,255
+C 180,180,180
 
 111111
 1000N1

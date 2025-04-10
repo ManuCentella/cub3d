@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:32:02 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/09 18:17:13 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/04/10 17:39:52 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_config
 }			t_config;
 
 int			parse_texture_line(char *line, t_config *cfg);
-int			assign_texture(char **dest, char *start);
+int			assign_texture(char **dest, char *start, const char *id);
 int			parse_color_line(char *line, t_config *cfg);
 int			parse_floor_color(char *rest, t_config *cfg);
 int			parse_ceiling_color(char *rest, t_config *cfg);
@@ -49,7 +49,9 @@ int			is_cell_closed(t_config *cfg, int y, int x);
 char		get_map_cell(t_config *cfg, int y, int x);
 int			is_valid_map_char(char c);
 int			report_map_error(const char *msg, int *has_error);
-void		validate_cell(t_config *cfg, int y, int x, int *player_count, int *has_error);
 int			validate_map(t_config *cfg);
+void	free_config(t_config *cfg);
+void	free_map(char **map);
+
 
 #endif

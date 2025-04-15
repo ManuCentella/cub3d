@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:31:26 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/10 18:05:09 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/04/14 10:45:53 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	parse_texture_line(char *line, t_config *cfg)
 	return (ret);
 }
 
-
 static int	is_valid_texture_path(const char *path)
 {
 	size_t	len;
@@ -50,26 +49,34 @@ static int	is_valid_texture_path(const char *path)
 	return (1);
 }
 
-int	assign_texture(char **dest, char *start, const char *id)
+static int	check_texture_path_validity(char **dest, const char *path,
+		const char *id)
 {
-	while (*start == ' ')
-		start++;
 	if (*dest != NULL)
 	{
 		printf("Error\nDuplicate texture identifier: %s\n", id);
 		return (0);
 	}
-	if (*start == '\0')
+	if (*path == '\0')
 	{
 		printf("Error\nEmpty texture path for identifier: %s\n", id);
 		return (0);
 	}
-	if (!is_valid_texture_path(start))
+	if (!is_valid_texture_path(path))
 	{
 		printf("Error\nInvalid texture path for identifier: %s → \"%s\"\n", id,
-			start);
+			path);
 		return (0);
 	}
+	return (1);
+}
+
+int	assign_texture(char **dest, char *start, const char *id)
+{
+	while (*start == ' ')
+		start++;
+	if (!check_texture_path_validity(dest, start, id))
+		return (0);
 	*dest = ft_strdup(start);
 	if (!*dest)
 	{

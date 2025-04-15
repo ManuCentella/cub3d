@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 14:52:04 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/10 17:39:23 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/04/14 10:55:30 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,11 @@ int	validate_config(t_config *cfg)
 	return (!has_error);
 }
 
-static int	validate_map_row(t_config *cfg, int row, int *player_count, int *has_error)
+static int	validate_map_row(t_config *cfg, int row, int *player_count,
+		int *has_error)
 {
-	int	x;
-	int	error;
+	int		x;
+	int		error;
 	char	c;
 
 	error = 0;
@@ -84,7 +85,7 @@ int	validate_map(t_config *cfg)
 		y++;
 	}
 	if (total_player != 1)
-		report_map_error("Map must have exactly one player position", &total_error);
+		report_map_error("Map must have exactly one player position",
+			&total_error);
 	return (!total_error);
 }
-

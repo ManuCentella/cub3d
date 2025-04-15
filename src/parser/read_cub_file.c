@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 20:03:37 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/10 17:06:44 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/04/14 12:14:13 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,17 @@ static int	count_lines(const char *filename)
 	if (fd < 0)
 		return (-1);
 	count = 0;
-	while ((line = get_next_line(fd)))
+	line = get_next_line(fd);
+	while (line)
 	{
 		count++;
 		free(line);
+		line = get_next_line(fd); // ✅ avanzar a la siguiente línea
 	}
 	close(fd);
 	return (count);
 }
+
 
 char	**read_cub_file(const char *filename)
 {
@@ -50,8 +53,12 @@ char	**read_cub_file(const char *filename)
 	if (fd < 0)
 		return (free(lines), NULL);
 	i = 0;
-	while ((line = get_next_line(fd)))
+	line = get_next_line(fd);
+	while (line)
+	{
 		lines[i++] = line;
+		line = get_next_line(fd);
+	}
 	lines[i] = NULL;
 	close(fd);
 	return (lines);

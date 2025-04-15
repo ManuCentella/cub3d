@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:51:27 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/10 17:10:16 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/04/14 10:40:15 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ int	parse_rgb_values(char *str, int *r, int *g, int *b)
 /* Parsea y asigna el color del suelo; utiliza parse_rgb_values(). */
 int	parse_floor_color(char *rest, t_config *cfg)
 {
-	int r, g, b;
+	int	r;
+	int	g;
+	int	b;
+
 	while (*rest == ' ')
 		rest++;
 	if (cfg->floor_color != -1)
@@ -83,7 +86,10 @@ int	parse_floor_color(char *rest, t_config *cfg)
 /* Parsea y asigna el color del techo; utiliza parse_rgb_values(). */
 int	parse_ceiling_color(char *rest, t_config *cfg)
 {
-	int r, g, b;
+	int	r;
+	int	g;
+	int	b;
+
 	while (*rest == ' ')
 		rest++;
 	if (cfg->ceiling_color != -1)

@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 17:44:08 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/10 17:11:01 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/04/14 10:55:54 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	free_config(t_config *cfg)
 	free(cfg->ea_path);
 	// No hace falta liberar colores, son int
 }
+
 void	free_map(char **map)
 {
 	int	i;

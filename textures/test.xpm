@@ -1,8 +1,0 @@
-/* XPM */
-static char *test[] = {
-"2 2 2 1",
-"a c #FF0000",
-"b c #000000",
-"aa",
-"bb"
-};

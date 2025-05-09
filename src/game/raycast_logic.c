@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:10:36 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/15 15:40:20 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/04/23 12:34:34 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,31 +62,55 @@ static void	setup_ray_steps(t_game *game, t_ray *ray)
 	}
 }
 
-/*
- * Ejecuta el algoritmo DDA hasta chocar con una pared ('1') en el mapa.
- */
-void	perform_dda(t_game *game, t_ray *ray)
-{
-	setup_ray_steps(game, ray);
-	while (1)
-	{
-		if (ray->side_dist_x < ray->side_dist_y)
-		{
-			ray->side_dist_x += ray->delta_dist_x;
-			ray->map_x += ray->step_x;
-			ray->side = 0;
-		}
-		else
-		{
-			ray->side_dist_y += ray->delta_dist_y;
-			ray->map_y += ray->step_y;
-			ray->side = 1;
-		}
-		if (game->config->map[ray->map_y][ray->map_x] == '1')
-		{
-			select_texture(ray);
-			break ;
-		}
 
-	}
+static int detect_hit(t_game *game, t_ray *ray)
+{
+    char cell;
+    int frame;
+
+    cell = game->config->map[ray->map_y][ray->map_x];
+    if (cell == '1')
+    {
+        select_texture(ray);
+        return (1);
+    }
+    if (cell == 'D' ||
+        (game->door.state == 3 &&
+         ray->map_x == game->door.x &&
+         ray->map_y == game->door.y))
+    {
+        frame = game->door.timer;
+        if (frame < 0)
+            frame = 0;
+        if (frame >= DOOR_FRAME_COUNT)
+            frame = DOOR_FRAME_COUNT - 1;
+        ray->tex_num = TEX_DOOR_START + frame;
+        return (1);
+    }
+    return (0);
+}
+
+/*
+ * Ejecuta el algoritmo DDA hasta chocar con una pared ('1') o una puerta ('D').
+ */
+void perform_dda(t_game *game, t_ray *ray)
+{
+    setup_ray_steps(game, ray);
+    while (1)
+    {
+        if (ray->side_dist_x < ray->side_dist_y)
+        {
+            ray->side_dist_x += ray->delta_dist_x;
+            ray->map_x += ray->step_x;
+            ray->side = 0;
+        }
+        else
+        {
+            ray->side_dist_y += ray->delta_dist_y;
+            ray->map_y += ray->step_y;
+            ray->side = 1;
+        }
+        if (detect_hit(game, ray))
+            break;
+    }
 }

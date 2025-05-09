@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:40:41 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/15 16:55:04 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:23:13 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,30 +44,39 @@ int	*get_texture_data(void *mlx, char *path, t_texture *tex)
 }
 
 
-int	load_textures(t_game *game)
+int load_textures(t_game *game)
 {
-	char	*paths[NUM_TEXTURES];
-	int		i;
-
-    paths[0] = game->config->no_path;
-    paths[1] = game->config->so_path;
-    paths[2] = game->config->ea_path;
-    paths[3] = game->config->we_path;
-    
-	i = 0;
-	while (i < NUM_TEXTURES)
-	{
-		game->textures[i].data = get_texture_data(game->mlx,
-				paths[i], &game->textures[i]);
-		if (!game->textures[i].data)
-			return (0);
-		i++;
-	}
-    if (!game->textures[i].data)
+    // Rutas de muros
+    const char *wall_paths[4] = {
+        game->config->no_path,
+        game->config->so_path,
+        game->config->ea_path,
+        game->config->we_path
+    };
+    int i;
+    // Carga texturas de muro
+    for (i = 0; i < 4; i++)
     {
-	    printf("❌ Error: textura inválida o no cargada: %s\n", paths[i]);
-	    return (0);
+        game->textures[i].data = get_texture_data(game->mlx,
+            (char *)wall_paths[i], &game->textures[i]);
+        if (!game->textures[i].data)
+            return (0);
     }
-
-	return (1);
+    // Carga texturas de puerta animada (door0.xpm ... door6.xpm)
+    char path_buf[64];
+    for (int f = 0; f < DOOR_FRAME_COUNT; f++)
+    {
+        snprintf(path_buf, sizeof(path_buf),
+            "./textures/door%d.xpm", f);
+        game->textures[TEX_DOOR_START + f].data =
+            get_texture_data(game->mlx,
+                path_buf,
+                &game->textures[TEX_DOOR_START + f]
+            );
+        if (!game->textures[TEX_DOOR_START + f].data)
+            return (0);
+    }
+    return (1);
 }
+
+

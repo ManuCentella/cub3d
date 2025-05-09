@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 17:52:54 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/10 17:39:45 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:59:00 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,9 @@ int	report_map_error(const char *msg, int *has_error)
 }
 
 // Verifica si un carácter está dentro del set permitido
-int	is_valid_map_char(char c)
+int is_valid_map_char(char c)
 {
-	return (c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W'
-		|| c == ' ');
+    return (c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W' || c == 'D' || c == ' ');
 }
 
 // Verifica si el carácter está dentro del mapa y no fuera de límites

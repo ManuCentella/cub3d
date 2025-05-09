@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 14:52:04 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/14 10:55:30 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/04/28 10:35:07 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,38 @@ static int	validate_map_row(t_config *cfg, int row, int *player_count,
 	}
 	return (error);
 }
+static int	is_door_invalid(t_config *cfg, int y, int x)
+{
+	// Comprobar si está en el borde
+	if (y == 0 || y == cfg->map_height - 1 || x == 0 || x == cfg->map_width - 1)
+		return (1);
+	// Comprobar si está tocando un espacio
+	if (get_map_cell(cfg, y - 1, x) == ' ' || get_map_cell(cfg, y + 1, x) == ' ' ||
+		get_map_cell(cfg, y, x - 1) == ' ' || get_map_cell(cfg, y, x + 1) == ' ')
+		return (1);
+	return (0);
+}
+static int	validate_doors_properly(t_config *cfg, int *has_error)
+{
+	int	x, y;
+
+	y = 0;
+	while (y < cfg->map_height)
+	{
+		x = 0;
+		while (x < cfg->map_width)
+		{
+			if (cfg->map[y][x] == 'D' && is_door_invalid(cfg, y, x))
+			{
+				report_map_error("Invalid door placement", has_error);
+				return (1);
+			}
+			x++;
+		}
+		y++;
+	}
+	return (0);
+}
 
 int	validate_map(t_config *cfg)
 {
@@ -84,6 +116,8 @@ int	validate_map(t_config *cfg)
 		validate_map_row(cfg, y, &total_player, &total_error);
 		y++;
 	}
+	if (validate_doors_properly(cfg, &total_error))
+		return (0);
 	if (total_player != 1)
 		report_map_error("Map must have exactly one player position",
 			&total_error);

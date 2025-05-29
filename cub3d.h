@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:32:02 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/23 11:27:12 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/05/29 14:06:23 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@
 # define MOVE_SPEED 0.02
 # define ROT_SPEED 0.02
 # define COLLIDE_RADIUS 0.1
-# define DOOR_FRAME_DELAY  8
-# define DOOR_FRAME_COUNT 7
-# define NUM_TEXTURES (4 + DOOR_FRAME_COUNT)
+#define TOTAL_TEXTURES 4
 # define TEXTURE_WIDTH 64
 # define TEXTURE_HEIGHT 64
 # define MINIMAP_SCALE 15
@@ -44,7 +42,14 @@ typedef struct s_config
 	char		**map;
 	int			map_width;
 	int			map_height;
+	int			error_already_reported;
+
+	// Campos añadidos para validación de filas
+	int			reported_invalid_char;
+	int			reported_open_wall;
+	int			map_row_error;
 }				t_config;
+
 
 typedef struct s_player
 {
@@ -111,18 +116,6 @@ typedef struct s_texture
 	int			endian;
 }				t_texture;
 
-typedef struct s_door
-{
-    int x;       // posición X de la puerta en el mapa
-    int y;       // posición Y de la puerta en el mapa
-    int state;   // 0=IDLE, 1=OPENING, 2=OPEN, 3=CLOSING
-    int timer;   // índice de frame actual (0..DOOR_FRAME_COUNT‑1)
-    int delay;   // contador interno para el retardo entre frames
-    int entry_x; // posición X de la casilla desde donde se abrió la puerta
-    int entry_y; // posición Y de la casilla desde donde se abrió la puerta
-} t_door;
-
-
 
 typedef enum e_tex_index
 {
@@ -130,8 +123,7 @@ typedef enum e_tex_index
 	TEX_SOUTH,
 	TEX_EAST,
 	TEX_WEST,
-	TEX_DOOR_START, // TEX_DOOR_START..TEX_DOOR_START+DOOR_FRAME_COUNT-1
-	TEX_COUNT = NUM_TEXTURES
+	TEX_COUNT = TOTAL_TEXTURES,
 }				t_tex_index;
 
 typedef struct s_game
@@ -142,8 +134,7 @@ typedef struct s_game
 	t_player	player;
 	t_image		image;
 	t_keys		keys;
-	t_texture	textures[NUM_TEXTURES];
-	t_door		door;
+	t_texture	textures[TOTAL_TEXTURES];
 }				t_game;
 
 // handle_input.c
@@ -178,7 +169,7 @@ int				handle_keypress(int keycode, t_game *game);
 int				close_window(t_game *game);
 int				run_parser(t_config *cfg, const char *filename);
 int				parse_texture_line(char *line, t_config *cfg);
-int				assign_texture(char **dest, char *start, const char *id);
+int				assign_texture(t_config *cfg, char **dest, char *start, const char *id);
 int				parse_color_line(char *line, t_config *cfg);
 int				parse_floor_color(char *rest, t_config *cfg);
 int				parse_ceiling_color(char *rest, t_config *cfg);
@@ -199,7 +190,9 @@ void			free_config(t_config *cfg);
 void			free_map(char **map);
 void			select_texture(t_ray *ray);
 int				load_textures(t_game *game);
-void			draw_minimap(t_game *game);
-void			open_door(t_game *game);
-void			update_door(t_game *game);
+void cleanup_game(t_game *game);
+int	is_valid_texture_path(const char *path);
+int	run_parser(t_config *cfg, const char *filename);
+int	is_map_line(const char *line);
+
 #endif

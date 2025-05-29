@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:10:36 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/23 12:34:34 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/05/19 16:02:05 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,30 +65,14 @@ static void	setup_ray_steps(t_game *game, t_ray *ray)
 
 static int detect_hit(t_game *game, t_ray *ray)
 {
-    char cell;
-    int frame;
-
-    cell = game->config->map[ray->map_y][ray->map_x];
-    if (cell == '1')
+    if (game->config->map[ray->map_y][ray->map_x] == '1')
     {
         select_texture(ray);
         return (1);
     }
-    if (cell == 'D' ||
-        (game->door.state == 3 &&
-         ray->map_x == game->door.x &&
-         ray->map_y == game->door.y))
-    {
-        frame = game->door.timer;
-        if (frame < 0)
-            frame = 0;
-        if (frame >= DOOR_FRAME_COUNT)
-            frame = DOOR_FRAME_COUNT - 1;
-        ray->tex_num = TEX_DOOR_START + frame;
-        return (1);
-    }
     return (0);
 }
+
 
 /*
  * Ejecuta el algoritmo DDA hasta chocar con una pared ('1') o una puerta ('D').

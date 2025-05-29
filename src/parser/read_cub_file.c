@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 20:03:37 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/14 12:14:13 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:39:14 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static int	count_lines(const char *filename)
 	close(fd);
 	return (count);
 }
-
 
 char	**read_cub_file(const char *filename)
 {

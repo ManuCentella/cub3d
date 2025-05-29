@@ -6,10 +6,9 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:00:07 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/22 19:24:48 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/05/19 15:12:11 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "cub3d.h"
 
@@ -39,25 +38,19 @@ void	put_pixel(t_image *img, int x, int y, int color)
 /*
  * Ciclo principal: lanza un rayo por cada columna de pantalla y la dibuja.
  */
-void render_frame(t_game *game)
+void	render_frame(t_game *game)
 {
-    // Avanza la animación de la puerta antes de dibujar
-    update_door(game);
+	int		x;
+	t_ray	ray;
 
-    // Raycasting columna a columna
-    int x;
-    t_ray ray;
-
-    for (x = 0; x < SCREEN_WIDTH; x++)
-    {
-        calculate_ray_values(game, &ray, x);
-        perform_dda(game, &ray);
-        compute_projection(game, &ray);
-        draw_column(game, &ray, x);
-    }
-
-    // Minimapa y presentación en pantalla
-    draw_minimap(game);
-    mlx_put_image_to_window(game->mlx, game->win,
-        game->image.img, 0, 0);
+	// Raycasting columna a columna
+	for (x = 0; x < SCREEN_WIDTH; x++)
+	{
+		calculate_ray_values(game, &ray, x);
+		perform_dda(game, &ray);
+		compute_projection(game, &ray);
+		draw_column(game, &ray, x);
+	}
+	// Presentación en pantalla
+	mlx_put_image_to_window(game->mlx, game->win, game->image.img, 0, 0);
 }

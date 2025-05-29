@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:20:48 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/22 16:42:08 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/05/19 15:16:27 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,6 @@ int	key_press(int keycode, t_game *game)
 {
     if (keycode == 65307)              // ESC
         close_window(game);
-    else if (keycode == 101)           // 'E'
-    {
-        open_door(game);
-        render_frame(game);            // redibuja la escena inmediatamente
-    }
     else if (keycode == 119)           // W
         game->keys.w = 1;
     else if (keycode == 115)           // S

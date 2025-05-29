@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 17:52:54 by mcentell          #+#    #+#             */
-/*   Updated: 2025/04/22 15:59:00 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:40:58 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,37 +21,47 @@ int	report_map_error(const char *msg, int *has_error)
 	return (1);
 }
 
-// Verifica si un carácter está dentro del set permitido
-int is_valid_map_char(char c)
+int	is_map_line(const char *line)
 {
-    return (c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W' || c == 'D' || c == ' ');
+	while (*line)
+	{
+		if (*line == '1' || *line == '0')
+			return (1);
+		line++;
+	}
+	return (0);
 }
 
-// Verifica si el carácter está dentro del mapa y no fuera de límites
+int	is_valid_map_char(char c)
+{
+	return (c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W'
+		|| c == 'D' || c == ' ');
+}
+
 char	get_map_cell(t_config *cfg, int y, int x)
 {
 	if (y < 0 || y >= cfg->map_height || x < 0 || x >= cfg->map_width)
-		return (' '); // Fuera de mapa → considerado espacio
+		return (' ');
 	return (cfg->map[y][x]);
 }
 
-// Verifica que un carácter no esté al borde o tocando un espacio
-int	is_cell_closed(t_config *cfg, int y, int x)
+int is_cell_closed(t_config *cfg, int y, int x)
 {
-	char	c;
+	char	c = get_map_cell(cfg, y, x);
 
-	c = get_map_cell(cfg, y, x);
-	if (c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W')
-	{
-		// Revisamos las 4 direcciones
-		if (get_map_cell(cfg, y - 1, x) == ' ')
-			return (0);
-		if (get_map_cell(cfg, y + 1, x) == ' ')
-			return (0);
-		if (get_map_cell(cfg, y, x - 1) == ' ')
-			return (0);
-		if (get_map_cell(cfg, y, x + 1) == ' ')
-			return (0);
-	}
+	if (c != '0' && c != 'N' && c != 'S' && c != 'E' && c != 'W')
+		return (1);
+	if (y - 1 < 0 || get_map_cell(cfg, y - 1, x) == ' ')
+		return (0);
+	if (y + 1 >= cfg->map_height || get_map_cell(cfg, y + 1, x) == ' ')
+		return (0);
+	if (x - 1 < 0 || get_map_cell(cfg, y, x - 1) == ' ')
+		return (0);
+	if (x + 1 >= (int)ft_strlen(cfg->map[y]) || get_map_cell(cfg, y, x + 1) == ' ')
+		return (0);
+
 	return (1);
 }
+
+
+

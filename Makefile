@@ -25,8 +25,6 @@ SRCS = \
 		src/parser/maps_utils.c \
 		src/parser/launch_parser.c\
 		src/game/textures.c\
-		src/game/minimap.c\
-		src/game/door.c
 		
 # Archivos objeto con estructura en build/
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)

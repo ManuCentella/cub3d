@@ -6,15 +6,12 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 12:31:26 by mcentell          #+#    #+#             */
-/*   Updated: 2025/05/28 16:55:43 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/06/02 19:34:54 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-/*
- * Valida duplicados, path no vacío y extensión .xpm.
- */
 static int	check_texture_path_validity(t_config *cfg,
 	char **dest, const char *path, const char *id)
 {
@@ -87,10 +84,7 @@ int	parse_texture_line(char *line, t_config *cfg)
 	return (ret);
 }
 
-/*
- * (Si lo usas en otro sitio, mantenlo; si no, ya no dará warning porque
- * se referencian en dispatch / assign.)
- */
+
 int	parse_texture_path(char **path_ptr, char *line)
 {
 	while (*line == ' ')
@@ -114,9 +108,6 @@ int	parse_texture_path(char **path_ptr, char *line)
 	return (1);
 }
 
-/*
- * Comprobación auxiliar independiente.
- */
 int	is_valid_texture_path(const char *path)
 {
 	size_t len = ft_strlen(path);

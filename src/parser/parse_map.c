@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 14:02:32 by mcentell          #+#    #+#             */
-/*   Updated: 2025/05/21 16:06:49 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/06/02 19:28:31 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 static int	count_map_lines(char **lines)
 {
-	int	i;
+	int	i = 0;
 
-	i = 0;
 	while (lines[i])
 		i++;
 	return (i);
@@ -24,74 +23,62 @@ static int	count_map_lines(char **lines)
 
 static int	get_max_width(char **lines, int height)
 {
-	int	i;
-	int	max;
-	int	len;
+	int	i, len, max = 0;
 
-	i = 0;
-	max = 0;
-	while (i < height)
+	for (i = 0; i < height; i++)
 	{
-		len = ft_strlen(lines[i]);
+		len = 0;
+		while (lines[i][len] && lines[i][len] != '\n' && lines[i][len] != '\r')
+			len++;
 		if (len > max)
 			max = len;
-		i++;
 	}
 	return (max);
 }
 
-
-static void	copy_and_pad(char *dest, const char *src, int max_width)
+static void	free_partial_map(char **map, int last_index)
 {
-	int	i;
+	while (last_index >= 0)
+		free(map[last_index--]);
+	free(map);
+}
 
+static char	*process_map_line(char *line, int max_width)
+{
+	char	*new_line;
+	int		len = 0;
+	int		i;
+
+	while (line[len] && line[len] != '\n' && line[len] != '\r')
+		len++;
+	new_line = malloc(sizeof(char) * (max_width + 1));
+	if (!new_line)
+		return (NULL);
 	i = 0;
-	while (src[i] && i < max_width)
+	while (i < len && i < max_width)
 	{
-		dest[i] = src[i];
+		new_line[i] = line[i];
 		i++;
 	}
 	while (i < max_width)
 	{
-		dest[i] = '1'; // ✅ Cerramos el mapa con muros en lugar de espacios
+		new_line[i] = ' ';  // ✅ No usamos '1', dejamos hueco para que la validación detecte errores reales
 		i++;
 	}
-	dest[max_width] = '\0';
-}
-
-
-static char	*process_map_line(char *line, int max_width)
-{
-	char	*trimmed;
-	char	*new_line;
-	int		len;
-
-	trimmed = ft_strtrim(line, " \t\r\n");
-	if (!trimmed)
-		return (NULL);
-	len = ft_strlen(trimmed);
-	new_line = malloc(sizeof(char) * (max_width + 1));
-	if (!new_line)
-	{
-		free(trimmed);
-		return (NULL);
-	}
-	copy_and_pad(new_line, trimmed, max_width);
-	free(trimmed);
+	new_line[max_width] = '\0';
 	return (new_line);
 }
 
-void	free_partial_map(char **map, int last_index)
+int	parse_map(char **lines, t_config *cfg)
 {
-	while (last_index-- >= 0)
-		free(map[last_index]);
-	free(map);
-}
+	int		h = count_map_lines(lines);
+	int		w = get_max_width(lines, h);
+	char	**map;
+	int		i;
 
-static int	fill_map_lines(char **map, char **lines, int h, int w)
-{
-	int	i;
-
+	map = malloc(sizeof(char *) * (h + 1));
+	if (!map)
+		return (0);
 	i = 0;
 	while (i < h)
 	{
@@ -104,22 +91,6 @@ static int	fill_map_lines(char **map, char **lines, int h, int w)
 		i++;
 	}
 	map[h] = NULL;
-	return (1);
-}
-
-int	parse_map(char **lines, t_config *cfg)
-{
-	int		h;
-	int		w;
-	char	**map;
-
-	h = count_map_lines(lines);
-	w = get_max_width(lines, h);
-	map = malloc(sizeof(char *) * (h + 1));
-	if (!map)
-		return (0);
-	if (!fill_map_lines(map, lines, h, w))
-		return (0);
 	cfg->map = map;
 	cfg->map_height = h;
 	cfg->map_width = w;

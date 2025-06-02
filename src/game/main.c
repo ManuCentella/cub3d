@@ -6,7 +6,7 @@
 /*   By: mcentell <mcentell@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:54:12 by mcentell          #+#    #+#             */
-/*   Updated: 2025/05/19 18:32:05 by mcentell         ###   ########.fr       */
+/*   Updated: 2025/06/02 19:48:27 by mcentell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,21 @@ void cleanup_game(t_game *game)
 {
 	int i;
 
+	if (!game)
+		return;
+
 	for (i = 0; i < TOTAL_TEXTURES; i++)
+	{
 		if (game->textures[i].img)
 			mlx_destroy_image(game->mlx, game->textures[i].img);
+	}
 
 	if (game->image.img)
 		mlx_destroy_image(game->mlx, game->image.img);
 
 	if (game->win)
 		mlx_destroy_window(game->mlx, game->win);
+
 	if (game->mlx)
 	{
 		mlx_destroy_display(game->mlx);
@@ -33,12 +39,14 @@ void cleanup_game(t_game *game)
 
 	if (game->config)
 	{
-		free_map(game->config->map);
+		if (game->config->map)
+			free_map(game->config->map);
 		free_config(game->config);
 	}
 
 	free(game);
 }
+
 
 int	main(int argc, char **argv)
 {
@@ -55,7 +63,6 @@ int	main(int argc, char **argv)
 
 	if (!load_textures(game))
 	{
-		printf("Error cargando texturas\n");
 		cleanup_game(game);
 		return (1);
 	}
